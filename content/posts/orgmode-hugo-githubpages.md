@@ -99,9 +99,47 @@ This is my post body
 
 ### add the workflow actions {#add-the-workflow-actions}
 
-```yaml
+<https://github.com/peaceiris/actions-hugo>
 
+```yaml
+name: GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # Set a branch to deploy
+  pull_request:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-22.04
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true  # Fetch Hugo themes (true OR recursive)
+          fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: '0.110.0'
+          # extended: true
+
+      - name: Build
+        run: hugo --minify
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        if: github.ref == 'refs/heads/main'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
 ```
+
+
+### Set `gh-pages` as publish branch and `root` as publish directory in github  \`-&gt;\` settings \`-&gt;\` pages {#set-gh-pages-as-publish-branch-and-root-as-publish-directory-in-github-settings-pages}
 
 
 ### <span class="org-todo todo TODO">TODO</span> Configuring a custom domain(Optional), Doesn't work {#configuring-a-custom-domain--optional--doesn-t-work}
