@@ -1,4 +1,5 @@
-baseURL = "/"
+# https://stackoverflow.com/questions/68088702/json-parse-error-on-running-hugo-command
+baseURL = ""
 languageCode = 'en-us'
 title = "Hsun' blog"
 theme = "PaperMod"
