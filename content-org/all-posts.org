@@ -1,0 +1,90 @@
+#+hugo_base_dir: ../
+
+* DONE Setup Blog Using Org Mode and Publish on github pages :hugo:emacs:githubpages:
+:PROPERTIES:
+:EXPORT_FILE_NAME: orgmode-hugo-githubpages
+:END:
+
+** Install *hugo*
+https://gohugo.io/installation/
+
+** Configurate *ox-hugo* in emacs config's file
+https://ox-hugo.scripter.co/doc/installation/
+
+#+begin_src emacs-lisp
+  (use-package ox-hugo
+    :ensure t   ;Auto-install the package from Melpa
+    :pin melpa  ;`package-archives' should already have ("melpa" . "https://melpa.org/packages/")
+    :after ox)
+
+  (with-eval-after-load 'ox
+    (require 'ox-hugo))
+#+end_src
+
+** Use hugo to generate the scaffold
+
+*** 1. Go to home directory and get the blog scaffold
+#+begin_src shell
+  cd && hugo new site blog && cd blog
+#+end_src
+
+*** 2. Use git submodule to get the theme *PaperMod*
+#+begin_src shell
+  git init
+  git submodule add https://github.com/adityatelange/hugo-PaperMod themes/PaperMod
+  echo 'theme = "PaperMod"' >> config.toml
+#+end_src
+
+*** 3. Append these lines to the site config
+   #+begin_src shell
+     [markup.goldmark.renderer]
+       unsafe = true
+   #+end_src
+
+** Write the org file
+*** 1. Setup the Hot-Reload
+Live listen the content
+#+begin_src shell
+  mkdir content-org
+  hugo server -D --navigateToChanged
+#+end_src
+
+Then Open the url
+http://localhost:1313/
+
+*** 2. Add `#+hugo_base_dir: ../` to tell ox-hugo the base dir
+#+begin_src org
+#+hugo_base_dir: ../
+
+\* My first post                                             :tag1:@category1:
+:PROPERTIES:
+:EXPORT_FILE_NAME: my-first-post
+:END:
+This is my post body
+
+#+end_src
+
+*** 3. Take the heading to be *DONE,* Shift + left
+
+*** 4. Tangle the file
+   `C-c C-e H H`
+
+** Host on github
+https://gohugo.io/hosting-and-deployment/hosting-on-github/
+
+*** create github repo
+
+*** add the workflow actions
+#+begin_src yaml
+#+end_src
+
+*** TODO Configuring a custom domain(Optional), Doesn't work
+https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site
+
+**** 1. supported custom domains
+- Custom domain : www.example.com  blog.example.com
+- Apex domain: example.com
+
+
+** reference
+https://ox-hugo.scripter.co/

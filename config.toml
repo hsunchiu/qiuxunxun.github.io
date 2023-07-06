@@ -1,0 +1,9 @@
+baseURL = "/"
+languageCode = 'en-us'
+title = "Hsun' blog"
+theme = "PaperMod"
+
+
+# use goldmark to render org files to markdown
+[markup.goldmark.renderer]
+    unsafe = true
