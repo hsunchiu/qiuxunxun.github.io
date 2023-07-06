@@ -157,3 +157,9 @@ A channel with a capacity of zero is unbuffered, otherwise, buffered
 
 *** unbuffered channels
 A send operation on an unbuffered channel blocks the sendings goroutine until another goroutine executes corresponding recieve on the same channel. Conversely, if the recieve operation was attempted first, the receiving goroutine is blocked until another goroutine send on the same channel.So, we can use =unbuffered= channel to =synchronize= goroutine.
+
+*** Unidirection Channel Types
+Expose only one or the other of the send and recieve oeprations.
+- `chan <- int` a =send-only= channel of init, allows receive but not sends
+- `<-chan int`, a =recieve-only= channel
+Note: https://stackoverflow.com/questions/59283469/how-to-be-not-confused-about-a-channel-direction-in-go
