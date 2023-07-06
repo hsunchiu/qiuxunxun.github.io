@@ -112,7 +112,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
 #+end_src
-*** Set =gh-pages= as publish branch and =root= as publish directory in github  `->` settings `->` pages 
+*** Set =gh-pages= as publish branch and =root= as publish directory in github  `->` settings `->` pages
 *** TODO Configuring a custom domain(Optional), Doesn't work
 https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site
 
@@ -123,3 +123,37 @@ https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pag
 
 ** reference
 https://ox-hugo.scripter.co/
+
+* Goroutines and Channels
+** Goroutines and function call
+difference:
+#+begin_src go
+  f() // call f(); wait for it to return
+  go f() // create a new goroutine the call f(); don't wait
+#+end_src
+
+** channel
+A channel is a =reference= to the data structure created by =make= .
+#+begin_src go
+  ch := make(chan int)			// ch has type `chan int`
+#+end_src
+
+Operations
+- send
+- revceive
+#+begin_src go
+  ch <- x 						// a send statement
+  x = <-ch 						// a recieve expression in a assignment statement
+  <- ch							// a recieve statement; result is discarded
+#+end_src
+
+=buffered= or =unbuffered=
+A channel with a capacity of zero is unbuffered, otherwise, buffered
+#+begin_src go
+  ch = make(chan int)// unbuffered channel
+  ch = make(chan int, 0) // unbuffered channel
+  ch = make(chan int, 3) // buffered channel with capacity 3
+#+end_src
+
+*** unbuffered channels
+A send operation on an unbuffered channel blocks the sendings goroutine until another goroutine executes corresponding recieve on the same channel. Conversely, if the recieve operation was attempted first, the receiving goroutine is blocked until another goroutine send on the same channel.So, we can use =unbuffered= channel to =synchronize= goroutine.
